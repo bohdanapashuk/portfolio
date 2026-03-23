@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio</title>
+  <style>
+    :root{
+      --bg:#faf8f4;
+      --bg2:#f3eee7;
+      --ink:#1a1520;
+      --mid:#6b6070;
+      --dim:#a899b0;
+      --lil:#8b79be;
+      --lil-l:#b8a9d8;
+      --lil-x:rgba(139,121,190,.10);
+      --lil-b:rgba(139,121,190,.22);
+      --card:#ffffff;
+      --line:#e8dfef;
+      --shadow:0 12px 30px rgba(26,21,32,.08);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.5;
+    }
+
+    .container{
+      width:min(1180px, calc(100% - 48px));
+      margin:0 auto;
+    }
+
+    .top{
+      padding:56px 0 22px;
+    }
+
+    .eyebrow{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:var(--lil);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:12px;
+      margin-bottom:18px;
+    }
+
+    .eyebrow::before{
+      content:"";
+      width:40px;
+      height:2px;
+      background:var(--lil);
+      display:block;
+    }
+
+    h1{
+      margin:0 0 28px;
+      font-size:clamp(44px, 8vw, 86px);
+      line-height:.95;
+      font-weight:400;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    h1 em{
+      color:var(--lil);
+      font-style:italic;
+      font-weight:400;
+    }
+
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:28px;
+    }
+
+    .tab{
+      border:1px solid var(--lil-b);
+      background:transparent;
+      color:var(--mid);
+      padding:12px 18px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:12px;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .tab:hover{
+      border-color:var(--lil);
+      color:var(--lil);
+    }
+
+    .tab.active{
+      background:var(--lil);
+      color:#fff;
+      border-color:var(--lil);
+    }
+
+    .panel{
+      display:none;
+      padding-bottom:56px;
+    }
+
+    .panel.active{
+      display:block;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:18px;
+    }
+
+    .card{
+      grid-column:span 4;
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 18px 34px rgba(26,21,32,.12);
+      border-color:var(--lil-b);
+    }
+
+    .card.large{
+      grid-column:span 8;
+    }
+
+    .thumb{
+      position:relative;
+      aspect-ratio: 4 / 3;
+      overflow:hidden;
+      background:linear-gradient(135deg,#ece7f7,#ddd4ef);
+    }
+
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .thumb.gradient-dark{
+      background:linear-gradient(135deg,#251a35,#4d3770);
+    }
+
+    .thumb.gradient-blue{
+      background:linear-gradient(135deg,#1b2538,#3e557b);
+    }
+
+    .thumb.gradient-pink{
+      background:linear-gradient(135deg,#38243f,#7c4c88);
+    }
+
+    .thumb.gradient-gold{
+      background:linear-gradient(135deg,#2c2034,#735c35);
+    }
+
+    .badge{
+      position:absolute;
+      top:14px;
+      left:14px;
+      z-index:2;
+      display:inline-flex;
+      align-items:center;
+      padding:6px 10px;
+      background:rgba(139,121,190,.92);
+      color:#fff;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .content{
+      padding:18px 18px 20px;
+    }
+
+    .meta{
+      color:var(--dim);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:11px;
+      margin-bottom:8px;
+    }
+
+    .title{
+      font-family: Georgia, "Times New Roman", serif;
+      font-size:32px;
+      line-height:1.02;
+      margin:0 0 10px;
+      font-weight:400;
+    }
+
+    .title.small{
+      font-size:24px;
+    }
+
+    .desc{
+      color:var(--mid);
+      font-size:15px;
+      margin:0 0 14px;
+    }
+
+    .skills{
+      color:var(--mid);
+      font-size:14px;
+      margin:0 0 16px;
+    }
+
+    .link{
+      color:var(--lil);
+      text-decoration:none;
+      font-size:14px;
+      font-weight:600;
+    }
+
+    .link:hover{
+      text-decoration:underline;
+    }
+
+    .video-list{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:18px;
+    }
+
+    .video-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .video-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 18px 34px rgba(26,21,32,.12);
+      border-color:var(--lil-b);
+    }
+
+    .video-hero{
+      aspect-ratio:16/9;
+      position:relative;
+      padding:20px;
+      display:flex;
+      align-items:flex-end;
+      background:linear-gradient(135deg,#1c1530,#5b4385);
+      color:#fff;
+    }
+
+    .video-hero.blue{
+      background:linear-gradient(135deg,#172131,#3f567c);
+    }
+
+    .video-hero.rose{
+      background:linear-gradient(135deg,#332038,#8d5f95);
+    }
+
+    .video-hero.gold{
+      background:linear-gradient(135deg,#2d2135,#8f6a37);
+    }
+
+    .video-hero .vtitle{
+      font-family: Georgia, "Times New Roman", serif;
+      font-size:34px;
+      line-height:1;
+      max-width:80%;
+    }
+
+    .video-body{
+      padding:18px;
+    }
+
+    .section-note{
+      color:var(--mid);
+      font-size:15px;
+      margin:-8px 0 20px;
+    }
+
+    @media (max-width: 980px){
+      .card,
+      .card.large{
+        grid-column:span 12;
+      }
+      .video-list{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      .container{
+        width:min(100% - 28px, 1180px);
+      }
+      .tabs{
+        gap:10px;
+      }
+      .tab{
+        width:100%;
+        text-align:left;
+      }
+      .title{
+        font-size:28px;
+      }
+      .title.small{
+        font-size:22px;
+      }
+      .video-hero .vtitle{
+        font-size:28px;
+        max-width:100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="top">
+    <div class="container">
+      <div class="eyebrow">Portfolio</div>
+      <h1>Selected <em>work</em></h1>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="all">All</button>
+        <button class="tab" data-tab="videos">Videos ✦</button>
+        <button class="tab" data-tab="photography">Photography</button>
+        <button class="tab" data-tab="design">Design</button>
+        <button class="tab" data-tab="cases">Business Case Studies</button>
+      </div>
+
+      <!-- ALL -->
+      <div class="panel active" id="all">
+        <div class="grid">
+
+          <article class="card large">
+            <div class="thumb">
+              <span class="badge">Photography</span>
+              <img src="1.jpg" alt="Point Reyes photography project cover">
+            </div>
+            <div class="content">
+              <div class="meta">Travel Photography · Landscape · Storytelling</div>
+              <h2 class="title">Point Reyes Farewell Trip</h2>
+              <p class="desc">
+                Captured a visual story of a weekend trip to Point Reyes with fellow Minerva students before leaving San Francisco.
+                The project focuses on natural landscapes, candid moments, and the emotional atmosphere of a meaningful farewell trip.
+              </p>
+              <a class="link" href="https://drive.google.com/drive/folders/116mzT2nQW2CmSkmWw9eqMa3pxNHXcjaP?usp=sharing" target="_blank" rel="noopener">View all photos →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb">
+              <span class="badge">Photography / Video</span>
+              <img src="2.jpg" alt="New York City visual diary cover">
+            </div>
+            <div class="content">
+              <div class="meta">Visual Diary · City Storytelling</div>
+              <h2 class="title small">New York City Visual Diary</h2>
+              <p class="desc">
+                Captured and edited a visual diary of a personal trip to New York City, blending short-form video, digital-camera photography, and cinematic everyday storytelling.
+              </p>
+              <a class="link" href="https://vm.tiktok.com/ZMSPNUub7/" target="_blank" rel="noopener">Watch video →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-dark">
+              <span class="badge">Motion Graphics / Design</span>
+            </div>
+            <div class="content">
+              <div class="meta">After Effects · Typography · Motion</div>
+              <h2 class="title small">Eden Book Teaser</h2>
+              <p class="desc">
+                A cinematic teaser created in After Effects, combining motion graphics, pacing, sound, and a distinct visual palette.
+              </p>
+              <a class="link" href="https://youtu.be/EWgSPkhF2bw" target="_blank" rel="noopener">Watch project →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-gold">
+              <span class="badge">Strategy / Marketing</span>
+            </div>
+            <div class="content">
+              <div class="meta">Sony (Arc & Beyond) · Civic Project</div>
+              <h2 class="title small">Sony Arc &amp; Beyond</h2>
+              <p class="desc">
+                Researched target audiences across Ghana and Nigeria and, based on those insights, created a marketing strategy and sample content for the civic project.
+              </p>
+              <a class="link" href="https://docs.google.com/presentation/d/1SqSGnZea7zZaNqhwlna5zaK-xhjvp_z33LUYhSLuwd8/edit?usp=sharing" target="_blank" rel="noopener">View project deck →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-blue">
+              <span class="badge">Business Case Study</span>
+            </div>
+            <div class="content">
+              <div class="meta">Brand Strategy · 4P Framework</div>
+              <h2 class="title small">Snapple Marketing Case Study</h2>
+              <p class="desc">
+                Built a modern turnaround strategy for Snapple using the 4P framework, centered on Gen Z repositioning, sustainability, authenticity, and long-term brand equity.
+              </p>
+              <a class="link" href="https://docs.google.com/document/d/1Bsp43ko0Mc5fZNxNel5iv7C90mXprMJYBtMQ01bQV6A/edit?usp=sharing" target="_blank" rel="noopener">Read case study →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-blue">
+              <span class="badge">Business Case Study</span>
+            </div>
+            <div class="content">
+              <div class="meta">Segmentation · Quantitative Analysis</div>
+              <h2 class="title small">TiVo Segmentation Case Study</h2>
+              <p class="desc">
+                Evaluated TiVo’s segmentation schemes using market analytics, quantitative exercises, and regression analysis to examine customer value and research design.
+              </p>
+              <a class="link" href="https://docs.google.com/document/d/1Bsp43ko0Mc5fZNxNel5iv7C90mXprMJYBtMQ01bQV6A/edit?usp=sharing" target="_blank" rel="noopener">Read case study →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-pink">
+              <span class="badge">Design</span>
+            </div>
+            <div class="content">
+              <div class="meta">Figma · Advocacy Visuals</div>
+              <h2 class="title small">Beat Sexism</h2>
+              <p class="desc">
+                Created visuals in Figma to spread awareness about gender inequality and support a mission-driven advocacy presence on social media.
+              </p>
+              <a class="link" href="https://www.instagram.com/beatsexismua/?hl=en" target="_blank" rel="noopener">View Instagram →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-pink">
+              <span class="badge">Design</span>
+            </div>
+            <div class="content">
+              <div class="meta">Brand Consistency · Community Design</div>
+              <h2 class="title small">On Emotions</h2>
+              <p class="desc">
+                Created event covers and emotional-intelligence awareness materials for a community of 1,000 people, maintaining visual consistency and a recognizable brand style across outputs.
+              </p>
+              <a class="link" href="https://drive.google.com/drive/folders/151zoR3DFn4FXXZ81aghUtouiI39GdDgl?usp=sharing" target="_blank" rel="noopener">View materials →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-dark">
+              <span class="badge">AI Animated Film</span>
+            </div>
+            <div class="content">
+              <div class="meta">AI Film Hackathon · Tokyo</div>
+              <h2 class="title small">Hands</h2>
+              <p class="desc">
+                Created for the AI Film Hackathon in Tokyo hosted by LocalHost HQ and Morphic at Digital Garage. Using Morphic for the first time, I made an animated short inspired by the prompt “Japanese Industrial Revolution.” The film won second place and a 50,000 yen prize among more than 70 participants.
+              </p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- VIDEOS -->
+      <div class="panel" id="videos">
+        <p class="section-note">Video and motion-based projects.</p>
+        <div class="video-list">
+
+          <article class="video-card">
+            <div class="video-hero blue">
+              <div class="vtitle">New York City Visual Diary</div>
+            </div>
+            <div class="video-body">
+              <div class="meta">Travel Video · Short-form Storytelling</div>
+              <p class="desc">
+                A personal visual diary combining city atmosphere, everyday aesthetics, candid moments, and cinematic editing.
+              </p>
+              <a class="link" href="https://vm.tiktok.com/ZMSPNUub7/" target="_blank" rel="noopener">Watch video →</a>
+            </div>
+          </article>
+
+          <article class="video-card">
+            <div class="video-hero">
+              <div class="vtitle">Eden Book Teaser</div>
+            </div>
+            <div class="video-body">
+              <div class="meta">Motion Graphics · After Effects</div>
+              <p class="desc">
+                A cinematic book teaser focused on animation, typography, pace, and atmosphere.
+              </p>
+              <a class="link" href="https://youtu.be/EWgSPkhF2bw" target="_blank" rel="noopener">Watch project →</a>
+            </div>
+          </article>
+
+          <article class="video-card">
+            <div class="video-hero rose">
+              <div class="vtitle">Hands</div>
+            </div>
+            <div class="video-body">
+              <div class="meta">AI Animated Film · Hackathon Project</div>
+              <p class="desc">
+                An animated short created in Morphic for the AI Film Hackathon in Tokyo, based on the prompt “Japanese Industrial Revolution.” Awarded second place and 50,000 yen among 70+ participants.
+              </p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- PHOTOGRAPHY -->
+      <div class="panel" id="photography">
+        <p class="section-note">Photography projects and linked photo collections.</p>
+        <div class="grid">
+
+          <article class="card large">
+            <div class="thumb">
+              <span class="badge">Photography</span>
+              <img src="1.jpg" alt="Point Reyes cover photo">
+            </div>
+            <div class="content">
+              <div class="meta">Point Reyes · San Francisco Farewell</div>
+              <h2 class="title">Point Reyes Farewell Trip</h2>
+              <p class="desc">
+                Captured a visual story of a weekend trip to Point Reyes with fellow Minerva students before leaving San Francisco, focusing on landscapes, candid moments, and the emotional atmosphere of the trip.
+              </p>
+              <a class="link" href="https://drive.google.com/drive/folders/116mzT2nQW2CmSkmWw9eqMa3pxNHXcjaP?usp=sharing" target="_blank" rel="noopener">View all pictures →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb">
+              <span class="badge">Photography / Video</span>
+              <img src="2.jpg" alt="NYC project photo 1">
+            </div>
+            <div class="content">
+              <div class="meta">New York City · Digital Camera</div>
+              <h2 class="title small">New York City Visual Diary</h2>
+              <p class="desc">
+                Captured and edited a visual diary of a personal trip to New York City, focused on everyday aesthetics, city atmosphere, iconic spots, and storytelling through photography and short-form video.
+              </p>
+              <a class="link" href="https://drive.google.com/drive/folders/11967P8PrimsqJt4oGPRAgllY3d6ippvk?usp=sharing" target="_blank" rel="noopener">View photo folder →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb">
+              <span class="badge">Photography</span>
+              <img src="3.jpg" alt="Point Reyes extra photo">
+            </div>
+            <div class="content">
+              <div class="meta">Favorite Frames</div>
+              <h2 class="title small">Point Reyes — Selected Images</h2>
+              <p class="desc">
+                A selection of favorite frames from the Point Reyes series, highlighting atmosphere, nature, and memory.
+              </p>
+              <a class="link" href="https://drive.google.com/drive/folders/116mzT2nQW2CmSkmWw9eqMa3pxNHXcjaP?usp=sharing" target="_blank" rel="noopener">Open collection →</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- DESIGN -->
+      <div class="panel" id="design">
+        <p class="section-note">Design, motion, and visual communication projects.</p>
+        <div class="grid">
+
+          <article class="card">
+            <div class="thumb gradient-dark">
+              <span class="badge">Motion Graphics</span>
+            </div>
+            <div class="content">
+              <div class="meta">After Effects · Visual Narrative</div>
+              <h2 class="title small">Eden Book Teaser</h2>
+              <p class="desc">
+                A 36-second cinematic trailer created in After Effects, combining animation, sound, and a clear brand palette.
+              </p>
+              <a class="link" href="https://youtu.be/EWgSPkhF2bw" target="_blank" rel="noopener">Watch project →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-gold">
+              <span class="badge">Strategy / Design</span>
+            </div>
+            <div class="content">
+              <div class="meta">Sony (Arc & Beyond) · Civic Project</div>
+              <h2 class="title small">Sony Arc &amp; Beyond</h2>
+              <p class="desc">
+                Researched target audiences across Ghana and Nigeria and, based on those insights, created a marketing strategy and sample content for the civic project.
+              </p>
+              <a class="link" href="https://docs.google.com/presentation/d/1SqSGnZea7zZaNqhwlna5zaK-xhjvp_z33LUYhSLuwd8/edit?usp=sharing" target="_blank" rel="noopener">View project deck →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-pink">
+              <span class="badge">Design</span>
+            </div>
+            <div class="content">
+              <div class="meta">Figma · Social Awareness</div>
+              <h2 class="title small">Beat Sexism</h2>
+              <p class="desc">
+                Created visuals in Figma to spread awareness about gender inequality and support mission-driven communication.
+              </p>
+              <a class="link" href="https://www.instagram.com/beatsexismua/?hl=en" target="_blank" rel="noopener">View Instagram →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-pink">
+              <span class="badge">Design</span>
+            </div>
+            <div class="content">
+              <div class="meta">Community Branding · Event Visuals</div>
+              <h2 class="title small">On Emotions</h2>
+              <p class="desc">
+                Created event covers and emotional-intelligence awareness materials for a community of 1,000 people, while maintaining visual consistency and brand style.
+              </p>
+              <a class="link" href="https://drive.google.com/drive/folders/151zoR3DFn4FXXZ81aghUtouiI39GdDgl?usp=sharing" target="_blank" rel="noopener">View materials →</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- CASES -->
+      <div class="panel" id="cases">
+        <p class="section-note">Strategy and analytics case studies.</p>
+        <div class="grid">
+
+          <article class="card">
+            <div class="thumb gradient-blue">
+              <span class="badge">Business Case Study</span>
+            </div>
+            <div class="content">
+              <div class="meta">Brand Strategy · Repositioning</div>
+              <h2 class="title small">Snapple Marketing Case Study</h2>
+              <p class="desc">
+                This project develops a modern turnaround strategy for Snapple using the 4P framework, grounded in brand history and secondary market research. It proposes a Gen Z–focused repositioning strategy centered on sustainability, community, authenticity, and long-term brand equity.
+              </p>
+              <p class="skills">
+                <strong>Skills:</strong> Brand strategy, repositioning, 4P analysis, purpose-driven marketing, cultural relevance strategy
+              </p>
+              <a class="link" href="https://docs.google.com/document/d/1Bsp43ko0Mc5fZNxNel5iv7C90mXprMJYBtMQ01bQV6A/edit?usp=sharing" target="_blank" rel="noopener">Read case study →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="thumb gradient-blue">
+              <span class="badge">Business Case Study</span>
+            </div>
+            <div class="content">
+              <div class="meta">Segmentation · Market Analytics</div>
+              <h2 class="title small">TiVo Segmentation Case Study</h2>
+              <p class="desc">
+                This project presents a market analytics–driven case analysis of TiVo, evaluating segmentation schemes, segment-level value creation, regression results, and the strengths and limitations of the case research design.
+              </p>
+              <p class="skills">
+                <strong>Skills:</strong> Market analytics, segmentation strategy, quantitative analysis, applied regression, research design critique, customer-centric strategy
+              </p>
+              <a class="link" href="https://docs.google.com/document/d/1Bsp43ko0Mc5fZNxNel5iv7C90mXprMJYBtMQ01bQV6A/edit?usp=sharing" target="_blank" rel="noopener">Read case study →</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
